@@ -31,7 +31,7 @@ jobs:
       sublevel: '136'
       os_patch_level: '2022-11'
       variant: ReSukiSU-NAToff-TEST
-      feature_set: 'SUSFS,NoMount,BBG,NET,DS,NTSync,Ptrace,Unicode,BTF'
+      feature_set: 'SUSFS+NoMount+BBG+NET+DS+NTSync+Ptrace+Unicode+BPF'
       root_flavor: resukisu
       root_commit: 3c1882886dbbb54f4aae7ddf205f8ccde32c2a34
       susfs_commit: ec785f47d49f7b3871ca9356f450411020af7017
