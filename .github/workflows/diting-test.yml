@@ -42,3 +42,5 @@ jobs:
       brand_name: DitingTest
       bypass: false
       use_cache: false
+
+# rerun after VINTF verifier correction
