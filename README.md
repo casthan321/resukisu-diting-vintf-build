@@ -1,3 +1,5 @@
+> **Experimental custom build:** This repository is an independently modified R20 build for testing an IPv6 NAT configuration correction. It is not an official WildKernels release and has not been validated on-device. See [DITING-BUILD.md](DITING-BUILD.md).
+
 <div align="center">
 
 # Wild Kernels for Android devices running GKI 2.0 (5.10+)
