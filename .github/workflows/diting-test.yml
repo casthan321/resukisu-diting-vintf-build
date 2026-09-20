@@ -50,3 +50,5 @@ jobs:
 # rerun after raw Image release matcher fix
 
 # rerun after kernel version regex fix
+
+# rerun after removing unreliable raw Image version gate
