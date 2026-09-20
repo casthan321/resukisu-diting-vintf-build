@@ -44,3 +44,5 @@ jobs:
       use_cache: false
 
 # rerun after VINTF verifier correction
+
+# rerun after verifier syntax fix
