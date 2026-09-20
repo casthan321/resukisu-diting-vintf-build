@@ -16,6 +16,10 @@ runs:
     shell: bash
     working-directory: ${{ github.workspace }}/kernel
     run: |
+      set -euo pipefail
+      # Apply after all feature patches, to the real input to Kconfig.
+      common/scripts/config --file common/arch/arm64/configs/gki_defconfig \
+        --disable IP6_NF_NAT --disable IP6_NF_TARGET_MASQUERADE
       sed -i 's/check_defconfig//' ./common/build.config.gki
       if [ -f "build/build.sh" ]; then
         BUILD_GKI_ARTIFACTS="" \
@@ -39,6 +43,17 @@ runs:
           --disk_cache=/home/runner/.cache/bazel \
           //common:kernel_aarch64/Image
       fi
+
+  - name: Verify compiled kernel configuration
+    shell: bash
+    run: |
+      set -euo pipefail
+      if [ -f "${{ github.workspace }}/kernel/bazel-bin/common/kernel_aarch64/Image" ]; then
+        image="${{ github.workspace }}/kernel/bazel-bin/common/kernel_aarch64/Image"
+      else
+        image="/home/runner/out/dist/Image"
+      fi
+      python3 "${{ github.workspace }}/verify_diting_image.py" "$image"
 
   - name: 'Gather Build Artifacts'
     shell: bash

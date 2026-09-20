@@ -287,9 +287,9 @@ jobs:
           done
 
           # Tracked build helpers (resolved automatically, before the run)
-          emit kernel_patches_commit "$(resolve_sha https://github.com/WildKernels/kernel_patches.git refs/heads/main)"
-          emit anykernel3_commit   "$(resolve_sha https://github.com/WildKernels/AnyKernel3.git refs/heads/gki-2.0)"
-          emit droidspaces_commit  "$(resolve_sha https://github.com/ravindu644/Droidspaces-OSS.git refs/heads/main)"
+          emit kernel_patches_commit "757201d983e2549dc7945a21fa6a056eb2e55263"
+          emit anykernel3_commit   "e1e9dce98430c5c6f231f7094a8c7f4ecaf50948"
+          emit droidspaces_commit  "f60294ac4c8aa2cc860773ac85bc5790104eb77f"
 
           echo "Resolved:"
           env | grep -E '^(nomount_commit|kernelsu_commit|kernelsu_branch|root_commit|susfs_commit_|kernel_patches_commit|anykernel3_commit|droidspaces_commit)' | sort || true
