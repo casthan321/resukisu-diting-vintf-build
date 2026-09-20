@@ -20,7 +20,7 @@ def verify(data):
     for name in ("CONFIG_KSU", "CONFIG_KSU_SUSFS"):
         if not re.search(r"^" + name + r"=y$", config, re.M):
             raise ValueError(name + " is not enabled")
-    version = re.search(rb"Linux version 5\\.10\\.136-android12[^\\x00\\n]*", data)
+    version = re.search(rb"5\\.10\\.136-android12[-+._A-Za-z0-9]*", data)
     if not version:
         raise ValueError("Unexpected compiled kernel version / KMI family")
     return config, version.group().decode("ascii", errors="replace")
