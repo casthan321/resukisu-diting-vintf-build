@@ -19,7 +19,7 @@ runs:
       set -euo pipefail
       # Apply after all feature patches, to the real input to Kconfig.
       common/scripts/config --file common/arch/arm64/configs/gki_defconfig \
-        --disable IP6_NF_NAT --disable IP6_NF_TARGET_MASQUERADE
+        --disable IP6_NF_NAT --disable IP6_NF_TARGET_MASQUERADE --disable SYSVIPC
       sed -i 's/check_defconfig//' ./common/build.config.gki
       if [ -f "build/build.sh" ]; then
         BUILD_GKI_ARTIFACTS="" \
@@ -72,4 +72,3 @@ runs:
       fi
 
       exit 1
-

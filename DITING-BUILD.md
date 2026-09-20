@@ -6,9 +6,12 @@ Based on WildKernels/GKI_KernelSU_SUSFS R20, commit
 Target: android12-5.10.136 / 2022-11, ReSukiSU. This is a TEST build,
 not a certified device-compatible release.
 
-Changes: disable CONFIG_IP6_NF_NAT and its dependent IPv6 MASQUERADE
-target in the real Kconfig input. Read the compiled Image's IKCONFIG
-before packaging and fail if either remains enabled, the kernel version
+Changes: disable CONFIG_IP6_NF_NAT, its dependent IPv6 MASQUERADE
+target, and CONFIG_SYSVIPC in the real Kconfig input. SYSVIPC is also
+forbidden by the Android 12 level-6 matrix on the target system;
+disabling it affects containers depending on System V IPC.
+Read the compiled Image's IKCONFIG
+before packaging and fail if any remains enabled, the kernel version
 is unexpected, or KSU/SUSFS is missing. No embedded configuration is rewritten.
 
 ReSukiSU is kept at R20's 3c1882886dbbb54f4aae7ddf205f8ccde32c2a34

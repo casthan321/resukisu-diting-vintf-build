@@ -1,4 +1,4 @@
-name: Diting ReSukiSU IPv6 NAT off test
+name: Diting ReSukiSU VINTF configuration test
 on:
   workflow_dispatch:
   push:
