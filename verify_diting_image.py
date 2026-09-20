@@ -20,7 +20,7 @@ def verify(data):
     for name in ("CONFIG_KSU", "CONFIG_KSU_SUSFS"):
         if not re.search(r"^" + name + r"=y$", config, re.M):
             raise ValueError(name + " is not enabled")
-    version = re.search(rb"Linux version 5\.10\.136-android12[^\x00\n]*", data)
+    version = re.search(rb"Linux version 5\\.10\\.136-android12[^\\x00\\n]*", data)
     if not version:
         raise ValueError("Unexpected compiled kernel version / KMI family")
     return config, version.group().decode("ascii", errors="replace")
@@ -32,6 +32,11 @@ if __name__ == "__main__":
     config, version = verify(data)
     path.with_name("diting-verified.config").write_text(config, encoding="utf-8")
     print(version)
-    masq = next((line for line in config.splitlines() if "CONFIG_IP6_NF_TARGET_MASQUERADE" in line), "CONFIG_IP6_NF_TARGET_MASQUERADE absent")\n    print("MASQUERADE state:", masq)\n    print("PASS: target VINTF requirements IP6_NF_NAT=n and SYSVIPC=n; KSU/SUSFS enabled")
+    masq = next(
+        (line for line in config.splitlines() if "CONFIG_IP6_NF_TARGET_MASQUERADE" in line),
+        "CONFIG_IP6_NF_TARGET_MASQUERADE absent",
+    )
+    print("MASQUERADE state:", masq)
+    print("PASS: target VINTF requirements IP6_NF_NAT=n and SYSVIPC=n; KSU/SUSFS enabled")
     print("Image SHA256:", hashlib.sha256(data).hexdigest())
     print("Static verification only. No claim of device boot or complete VINTF compatibility.")
