@@ -63,6 +63,14 @@ on:
         required: false
         type: string
         default: Wild
+      release_suffix:
+        required: false
+        type: string
+        default: ''
+      build_timestamp_utc:
+        required: false
+        type: string
+        default: ''
       bypass:
         required: false
         type: boolean
@@ -124,8 +132,10 @@ jobs:
         kernel_version: ${{ inputs.kernel_version }}
         os_patch_level: ${{ inputs.os_patch_level }}
 
-    - name: Set Build Timestamp from Kernel Commit
+    - name: Set Build Timestamp
       shell: bash
+      env:
+        BUILD_TIMESTAMP_OVERRIDE: ${{ inputs.build_timestamp_utc }}
       run: |
         set -x
         # Hardcode the build timestamp to the 5th day of the patch level
@@ -140,7 +150,7 @@ jobs:
         else
           OS_PATCH_LEVEL_YM="$OS_PATCH_LEVEL_INPUT"
         fi
-        FIXED_BUILD_DATE="${OS_PATCH_LEVEL_YM}-05 04:20:00 UTC"
+        FIXED_BUILD_DATE="${BUILD_TIMESTAMP_OVERRIDE:-${OS_PATCH_LEVEL_YM}-05 04:20:00 UTC}"
         SOURCE_DATE_EPOCH=$(date -u -d "$FIXED_BUILD_DATE" +%s)
         echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" >> $GITHUB_ENV
         KBUILD_TS=$(date -u -d @${SOURCE_DATE_EPOCH} '+%a %b %d %H:%M:%S UTC %Y')
@@ -361,6 +371,7 @@ jobs:
         version: ${{ inputs.version }}
         sublevel: ${{ steps.extract.outputs.sublevel }}
         brand_name: ${{ inputs.brand_name }}
+        release_suffix: ${{ inputs.release_suffix }}
 
     - name: Remove Protected Exports
       uses: ./.github/actions/remove-protected-exports

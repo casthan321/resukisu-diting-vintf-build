@@ -39,7 +39,8 @@ jobs:
       kernel_patches_commit: 757201d983e2549dc7945a21fa6a056eb2e55263
       anykernel3_commit: e1e9dce98430c5c6f231f7094a8c7f4ecaf50948
       droidspaces_commit: f60294ac4c8aa2cc860773ac85bc5790104eb77f
-      brand_name: DitingTest
+      release_suffix: '-android12-9-00021-g821df8f5bd36-ab9585204'
+      build_timestamp_utc: 'Thu Feb 9 13:08:46 UTC 2023'
       bypass: false
       use_cache: false
 

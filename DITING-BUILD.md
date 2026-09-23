@@ -11,8 +11,9 @@ target, and CONFIG_SYSVIPC in the real Kconfig input. SYSVIPC is also
 forbidden by the Android 12 level-6 matrix on the target system;
 disabling it affects containers depending on System V IPC.
 Read the compiled Image's IKCONFIG
-before packaging and fail if any remains enabled, the kernel version
-is unexpected, or KSU/SUSFS is missing. No embedded configuration is rewritten.
+before packaging and fail if any remains enabled or KSU/SUSFS is missing.
+The current verifier does not validate the built Image's release string.
+No embedded configuration is rewritten.
 
 ReSukiSU is kept at R20's 3c1882886dbbb54f4aae7ddf205f8ccde32c2a34
 (UAPI 2, paired manager 35116). This does not make it compatible with the
@@ -29,10 +30,16 @@ Only one target should be dispatched:
     commit_mode: verified
     use_cache: false
     bypass: false
-    brand_name: DitingTest
+    release_suffix: -android12-9-00021-g821df8f5bd36-ab9585204
+    build_timestamp_utc: Thu Feb 9 13:08:46 UTC 2023
     release_type: Action
 
 The change addresses a known kernel-config mismatch. Passing this static
 check does not prove that all VINTF requirements pass or that hardware and
 vendor modules work. Keep a matching stock boot image and verify on-device
 before treating any resulting artifact as suitable for daily use.
+
+The release suffix and build timestamp match the stock boot image from MIUI
+V14.0.11.0.TLFCNXM. They are build metadata only: this experimental ReSukiSU
+kernel is not the stock Xiaomi kernel, and matching strings do not establish
+ABI or device compatibility.
