@@ -12,7 +12,8 @@ forbidden by the Android 12 level-6 matrix on the target system;
 disabling it affects containers depending on System V IPC.
 Read the compiled Image's IKCONFIG
 before packaging and fail if any remains enabled or KSU/SUSFS is missing.
-The current verifier does not validate the built Image's release string.
+The configuration verifier does not validate the built Image's release string;
+the workflow separately checks the compiled banner when a release suffix is set.
 No embedded configuration is rewritten.
 
 ReSukiSU is kept at R20's 3c1882886dbbb54f4aae7ddf205f8ccde32c2a34

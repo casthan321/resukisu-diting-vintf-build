@@ -479,6 +479,37 @@ jobs:
       with:
         version: ${{ inputs.version }}
 
+    - name: Verify requested kernel metadata in Image
+      if: inputs.release_suffix != ''
+      shell: bash
+      env:
+        EXPECTED_RELEASE: ${{ inputs.kernel_version }}.${{ steps.extract.outputs.sublevel }}${{ inputs.release_suffix }}
+        EXPECTED_TIMESTAMP: ${{ inputs.build_timestamp_utc }}
+      run: |
+        set -euo pipefail
+        if [ -f "${{ github.workspace }}/kernel/bazel-bin/common/kernel_aarch64/Image" ]; then
+          image="${{ github.workspace }}/kernel/bazel-bin/common/kernel_aarch64/Image"
+        else
+          image="/home/runner/out/dist/Image"
+        fi
+        python3 - "$image" <<'PY'
+        import os
+        import pathlib
+        import re
+        import sys
+
+        data = pathlib.Path(sys.argv[1]).read_bytes()
+        release = os.environ['EXPECTED_RELEASE'].encode()
+        timestamp = os.environ['EXPECTED_TIMESTAMP'].encode()
+        lines = re.findall(rb'Linux version [^\x00\n]+', data)
+        matches = [line for line in lines if line.startswith(b'Linux version ' + release + b' (')]
+        if len(matches) != 1:
+            raise SystemExit(f'Expected one compiled kernel banner for {release.decode()}; found {len(matches)}')
+        if timestamp and not matches[0].endswith(timestamp):
+            raise SystemExit(f'Kernel timestamp mismatch: {matches[0].decode(errors="replace")}')
+        print('Verified compiled Image banner:', matches[0].decode())
+        PY
+
     - name: Get Cache Stats
       uses: ./.github/actions/cache-stats
       with:
@@ -558,9 +589,9 @@ jobs:
         # Get kernel version from Image if available
         KERNEL_VER_STR=""
         if [ -f "/home/runner/out/dist/Image" ]; then
-          KERNEL_VER_STR=$(strings "/home/runner/out/dist/Image" | grep -m1 "^Linux version " | sed 's/Linux version //' || echo "")
+          KERNEL_VER_STR=$(strings "/home/runner/out/dist/Image" | grep -m1 "^Linux version [0-9]" | sed 's/Linux version //' || echo "")
         elif [ -f "/home/runner/out/Image" ]; then
-          KERNEL_VER_STR=$(strings "/home/runner/out/Image" | grep -m1 "^Linux version " | sed 's/Linux version //' || echo "")
+          KERNEL_VER_STR=$(strings "/home/runner/out/Image" | grep -m1 "^Linux version [0-9]" | sed 's/Linux version //' || echo "")
         fi
         
         # Get KSU version from env (set by kernelsu action)
